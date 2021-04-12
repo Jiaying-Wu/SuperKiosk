@@ -1,33 +1,34 @@
+import java.util.Random;
 
 /**
- * Write a description of class LuckyDipGenerator here.
+ * class LuckyDipGenerator to generate the random number for item option.
  *
- * @author (your name)
- * @version (a version number or a date)
+ * @author (Jiaying Wu)
+ * @version 2.0 (2021.04.13)
  */
 public class LuckyDipGenerator
 {
     // instance variables - replace the example below with your own
-    private int x;
+    private String randomItem;
 
     /**
      * Constructor for objects of class LuckyDipGenerator
      */
     public LuckyDipGenerator()
     {
-        // initialise instance variables
-        x = 0;
     }
 
+    
     /**
-     * An example of a method - replace this comment with your own
+     * Method getRandomItem
      *
-     * @param  y  a sample parameter for a method
-     * @return    the sum of x and y
+     * @return The return value
      */
-    public int sampleMethod(int y)
+    public String getRandomItem()
     {
-        // put your code here
-        return x + y;
+        Random random = new Random();
+        String randomItem = "";
+        // add 1 since the original random range is 0 to 4.
+        return randomItem + (random.nextInt(5) + 1);
     }
 }

@@ -2,130 +2,148 @@ import java.util.*;
 
 /**
  * class Customer to store and set the customer name, the credit balance, 
- * what items has been purchased and their total costs.
+ * what items has been purchased and their total costs. It also allow
+ * customer to buy item and credit and print customer summary.
  *
  * @author (Jiaying Wu)
- * @version (2021.04.10)
+ * @version 2.0 (2021.04.13)
  */
 public class Customer
 {
     // instance variables 
     private String name;
-    private int creditBalance;
+    private int credit;
     private String purchasedItems;
     private int totalCost;
 
+    // Decalre and create object
+    Scanner input = new Scanner(System.in);
+    Item item = new Item();
+    LuckyDipGenerator random = new LuckyDipGenerator();
+
     /**
-     * Customer Constructor
+     * Customer Constructor initialise the name, credit, purchased items and total cost.
      *
-     * @param newName A parameter
-     * @param startCredit A parameter
      */
     public Customer()
     {
-        // Decalre and create object
-        Scanner input = new Scanner(System.in);
-
-        // repeat until name not empty
-        name = "";
-        while (name == "")
-        {
-            // ask for name
-            System.out.print("\nPlease enter your name: ");
-            name = input.nextLine();
-
-            // print error message if name is blank
-            if (name == "")
-                System.out.println("Error: The name can not be blank!");
-
-        }
-
-        // repeat until start credit lager than 0
-        creditBalance = 0;
-        while (creditBalance <= 0)
-        {
-            // ask for start credit
-            System.out.print("Please enter the credit you want to buy: ");
-            creditBalance = input.nextInt();
-
-            // print error message if start credit is not positive
-            if (creditBalance <= 0)
-                System.out.println("Error: Please enter a positive integer only!");
-        }
-
         // initialise instance variables
+        name = "";
+        credit = 0;
         purchasedItems = "";
         totalCost = 0;
     }
 
     /**
-     * Method getName
+     * Method setName to set the new customer name
      *
-     * @return The return value
+     */
+    public void setName()
+    {
+        // repeat until name not blank
+        while (name.equals(""))
+        {
+            // ask for name
+            System.out.print("\nPlease enter your name: ");
+            name = input.nextLine().trim();
+
+            // print error message if name is blank
+            if (name.equals(""))
+                System.out.println("Error: The name can not be blank!");
+        }
+    }
+
+    /**
+     * Method getName return the customer name
+     *
+     * @return The customer name
      */
     public String getName()
-    {        
+    {
         return name;
     }
 
     /**
-     * Method getCreditBalance
+     * Method setCredit will set the start credit
      *
-     * @return The return value
      */
-    public int getCreditBalance()
-    {        
-        return creditBalance;
+    public void setCredit()
+    { 
+        // repeat until start credit lager than 0
+        while (credit <= 0)
+        {
+            // ask for start credit
+            System.out.print("Please enter the credit you want to buy: ");
+            credit = Integer.valueOf(input.nextLine());
+
+            // print error message if start credit is not positive
+            if (credit <= 0)
+                System.out.println("Error: Please enter a positive integer only!");
+        }
     }
 
     /**
-     * Method getPurchasedItems
+     * Method buyCredit ask the user enter the credit as input and update the credit balance.
      *
-     * @return The return value
      */
-    public String getPurchasedItems()
-    {        
-        return purchasedItems;
-    }
-
-    /**
-     * Method getTotalCost
-     *
-     * @return The return value
-     */
-    public int getTotalCost()
-    {        
-        return totalCost;
-    }
-
-    /**
-     * Method setCreditBalance
-     *
-     * @param newCredit A parameter
-     */
-    public void setCreditBalance(int newCredit)
+    public void buyCredit()
     {
-        creditBalance += newCredit;
+        System.out.println("\nThe amount of credit you want to buy: ");
+        int newCredit = Integer.valueOf(input.nextLine());
+
+        // Validate if the input credit larger than 0
+        if (newCredit <= 0)
+            System.out.println("\nThe amount of credit you want to buy: ");
+        else
+            credit += Integer.valueOf(newCredit);
+        System.out.println("Credit balance: " + credit);
     }
 
     /**
-     * Method setPurchasedItems
+     * Method buyItem ask customer item option as input and get the name and price from item
+     * object, then print the item message.
      *
-     * @param newItem A parameter
      */
-    public void setPurchasedItems(String newItem)
+    public void buyItem()
     {
-        purchasedItems += newItem;
+        System.out.println("\nPick the item between 1 to 6: ");
+        String itemChoice = input.nextLine().trim();
+
+        // check if the credit greather than or equal to the item price
+        if (item.getItemPrice(itemChoice) <= credit)
+        {
+            // generate random item number
+            if (itemChoice.equals("6"))
+            {
+                itemChoice = random.getRandomItem();
+            }
+            // update purchased itemsm, credit and Total cost.
+            purchasedItems += itemChoice;
+            credit -= item.getItemPrice(itemChoice);
+            totalCost += item.getItemPrice(itemChoice);
+            // print item information
+            System.out.println("You have now purchase: " + item.getItemName(itemChoice));
+            System.out.print(", cost: " + item.getItemPrice(itemChoice));
+            System.out.println("You new credit balance is: " + credit);
+        }    
+        // print error if credit less than item price
+        else
+        {
+            System.out.println("Sorry, you do not have enough credit to purchase this item!");
+            System.out.println("Credit Balance: $" + item.getItemPrice(itemChoice));
+            System.out.println("Item Cost: $" + credit);
+        }
     }
 
-    /**
-     * Method setTotalCost
-     *
-     * @param newCost A parameter
-     * @return The return value
-     */
-    public void setTotalCost(int newCost)
+    public void customerSummary()
     {
-        totalCost += newCost;
+        System.out.println("Customer " + name + "has purchased these items:");
+        for (int index = 0; index < purchasedItems.length(); index++)
+        {
+            System.out.print(" " + item.getItemName(String.valueOf(purchasedItems.charAt(index))));
+        }
+        System.out.println();
+        System.out.println("Total cost: " + totalCost);
+        System.out.println("Credit balance: " + credit);
     }
 }

@@ -11,4 +11,5 @@ small selection of items available.
 VERSION or DATE: 2021.04.10
 HOW TO START THIS PROJECT:
 AUTHORS: Jiaying Wu
-USER INSTRUCTIONS:
+USER INSTRUCTIONS: First compile the project, then right click "Kiosk"
+to select "new Kiosk()" and name the instance to start the simulation.
